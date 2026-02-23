@@ -1,0 +1,542 @@
+<!-- FICHIER COMPLET - À COLLER DANS UN SEUL EMBED WEBFLOW -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tesseract.js/5.0.4/tesseract.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<script>pdfjsLib.GlobalWorkerOptions.workerSrc='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';</script>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+:root{--bg:#0a0a0f;--card:#141419;--card-border:#1f1f26;--text:#fff;--text-muted:#9494a0;--accent:#6366f1;--accent-light:#1a1b2e;--red:#ef4444;--red-light:#2a1a1a;--orange:#f59e0b;--orange-light:#2a2210;--green:#10b981;--green-light:#0f2419;--input-bg:#1a1a1f}
+#dapp *{margin:0;padding:0;box-sizing:border-box}
+#dapp{font-family:Inter,sans-serif!important;background:var(--bg)!important;min-height:100vh;color:var(--text)!important;padding:40px 32px;display:flex;justify-content:center;align-items:flex-start}
+#dapp .dw-container{max-width:1400px;width:100%;margin:0 auto}
+#dapp .logo-area{text-align:center;margin-bottom:40px}
+#dapp .logo-area img{height:32px;margin-bottom:16px}
+#dapp .logo-area h1{font-size:32px;font-weight:700;background:linear-gradient(135deg,#6366f1,#a855f7);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+#dapp .logo-area p{font-size:15px;color:var(--text-muted);margin-top:8px}
+#dapp .card{background:var(--card);border:1px solid var(--card-border);border-radius:20px;padding:64px 80px;box-shadow:0 4px 20px rgba(0,0,0,.3);margin:0 auto}
+#dapp .section{display:none!important}
+#dapp .section.active{display:block!important}
+#dapp .login-label{display:block;font-size:12px;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:.8px;margin-bottom:8px}
+#dapp .login-row{display:flex;gap:12px}
+#dapp .login-row input{flex:1;padding:16px 20px;border:1px solid var(--card-border);border-radius:12px;font-size:18px;font-weight:600;background:var(--input-bg);color:var(--text);outline:0;font-family:inherit}
+#dapp .login-row input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(99,102,241,.1)}
+#dapp .greeting{text-align:center;margin-bottom:32px;padding-bottom:24px;border-bottom:1px solid var(--card-border);max-width:1450px;margin-left:auto;margin-right:auto}
+#dapp .greeting .hello{font-size:12px;color:var(--text-muted);text-transform:uppercase;letter-spacing:1.2px;font-weight:600}
+#dapp .greeting .name{font-size:28px;font-weight:700;margin-top:8px;background:linear-gradient(135deg,#fff,#9494a0);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+#dapp .dashboard-grid{display:grid;grid-template-columns:1fr 1fr;gap:32px;margin-bottom:48px;max-width:1450px;margin-left:auto;margin-right:auto}
+#dapp .dashboard-card{background:linear-gradient(135deg, var(--card) 0%, var(--input-bg) 100%);border:1px solid var(--card-border);border-radius:20px;padding:32px 40px;transition:all .3s;position:relative;overflow:hidden;display:flex;flex-direction:column}
+#dapp .dashboard-card::before{content:'';position:absolute;top:0;left:0;right:0;height:4px;background:linear-gradient(90deg,var(--accent),var(--accent-hover))}
+#dapp .dashboard-card:hover{transform:translateY(-4px);box-shadow:0 12px 40px rgba(99,102,241,.15);border-color:var(--accent)}
+#dapp .dashboard-header{display:flex;align-items:center;gap:12px;margin-bottom:28px}
+#dapp .dashboard-header h3{font-size:16px;font-weight:700;color:var(--text);margin:0}
+#dapp .dashboard-stats{display:flex;justify-content:space-between;gap:16px;margin-bottom:24px;flex-wrap:nowrap}
+#dapp .stat{text-align:center;padding:20px 10px;background:rgba(99,102,241,.05);border-radius:12px;border:1px solid rgba(99,102,241,.1);min-height:100px;min-width:120px;display:flex;flex-direction:column;justify-content:center;align-items:center}
+#dapp .stat-value{font-size:24px;font-weight:700;color:var(--text);margin-bottom:8px;line-height:1.2;white-space:nowrap}
+#dapp .stat-value.attente{color:var(--orange)}
+#dapp .stat-value.approuve{color:var(--green)}
+#dapp .stat-value.rejete{color:var(--red)}
+#dapp .stat-amount{font-size:13px;color:var(--text-muted);margin-bottom:6px;font-weight:600}
+#dapp .stat-label{font-size:8px;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.8px;font-weight:700;white-space:nowrap}
+#dapp .btn-view-all{width:100%;padding:12px;background:rgba(99,102,241,.1);border:1px solid rgba(99,102,241,.2);border-radius:12px;color:var(--accent);font-size:13px;font-weight:600;cursor:pointer;transition:all .3s;font-family:inherit;display:flex;align-items:center;justify-content:center;gap:8px}
+#dapp .btn-view-all:hover{background:var(--accent);color:#fff;border-color:var(--accent);transform:translateY(-2px);box-shadow:0 4px 12px rgba(99,102,241,.3)}
+#dapp .divider-section{height:1px;background:linear-gradient(90deg,transparent,var(--card-border) 50%,transparent);margin:48px 0}
+#dapp .section-title{font-size:24px;font-weight:700;margin-bottom:32px;color:var(--text);position:relative;padding-bottom:12px}
+#dapp .section-title::after{content:'';position:absolute;bottom:0;left:0;width:60px;height:3px;background:linear-gradient(90deg,var(--accent),var(--accent-hover));border-radius:2px}
+#dapp .deposit-section{padding-top:8px;max-width:700px;margin:0 auto}
+#dapp .type-selector{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:4px}
+#dapp .type-btn{padding:16px 20px;background:var(--input-bg);border:2px solid var(--card-border);border-radius:14px;color:var(--text);font-size:15px;font-weight:600;cursor:pointer;transition:all .3s;font-family:inherit;display:flex;align-items:center;justify-content:center;gap:10px}
+#dapp .type-btn:hover{border-color:rgba(99,102,241,.5);background:rgba(99,102,241,.05);transform:translateY(-2px)}
+#dapp .type-btn.active{background:linear-gradient(135deg,var(--accent),var(--accent-hover));color:#fff;border-color:var(--accent);box-shadow:0 4px 16px rgba(99,102,241,.4)}
+#dapp .form-type-content{display:none;margin-top:32px}
+#dapp .form-type-content.active{display:block}
+#dapp .field{margin-bottom:24px}
+#dapp .field label{display:block;font-size:12px;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:.8px;margin-bottom:8px}
+#dapp .field input{width:100%;padding:14px 18px;border:1px solid var(--card-border);border-radius:12px;font-size:15px;background:var(--input-bg);color:var(--text);outline:0;font-family:inherit}
+#dapp .field input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(99,102,241,.1)}
+#dapp .field input::placeholder{color:var(--text-muted)}
+#dapp .field input[type=date]::-webkit-calendar-picker-indicator{filter:invert(1)}
+#dapp .select-input{width:100%;padding:14px 18px;border:1px solid var(--card-border);border-radius:12px;font-size:15px;background:var(--input-bg);color:var(--text);outline:0;font-family:inherit;cursor:pointer}
+#dapp .select-input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(99,102,241,.1)}
+#dapp .declaration-card{background:var(--input-bg);border:2px solid var(--accent);border-radius:16px;padding:32px;margin-bottom:32px}
+#dapp .declaration-header{text-align:center;margin-bottom:24px}
+#dapp .declaration-header h3{font-size:20px;font-weight:700;color:var(--text);margin:0 0 8px 0}
+#dapp .declaration-subtitle{font-size:14px;color:var(--text-muted);margin:0}
+#dapp .declaration-form{max-width:500px;margin:0 auto}
+#dapp .declaration-info-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:24px}
+#dapp .declaration-info-item{background:rgba(99,102,241,.05);padding:16px;border-radius:12px;text-align:center}
+#dapp .declaration-info-label{display:block;font-size:11px;color:var(--text-muted);text-transform:uppercase;letter-spacing:.8px;margin-bottom:8px;font-weight:600}
+#dapp .declaration-info-value{display:block;font-size:20px;font-weight:700;color:var(--text)}
+#dapp .declaration-notice{background:rgba(99,102,241,.1);border-left:4px solid var(--accent);padding:16px;border-radius:8px;font-size:14px;color:var(--text);margin-bottom:16px;line-height:1.6}
+#dapp .declaration-readonly-note{text-align:center;font-size:13px;color:var(--text-muted);margin:0}
+#dapp .divider{height:1px;background:var(--card-border);margin:32px 0}
+#dapp .dropzone{border:2px dashed var(--card-border);border-radius:16px;padding:40px 24px;text-align:center;cursor:pointer;background:var(--input-bg);position:relative;transition:all .3s}
+#dapp .dropzone:hover{border-color:var(--accent);background:var(--accent-light)}
+#dapp .dropzone input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
+#dapp .dropzone-icon{font-size:32px;margin-bottom:12px}
+#dapp .dropzone-text{font-size:15px;font-weight:500}
+#dapp .dropzone-sub{font-size:13px;color:var(--text-muted);margin-top:6px}
+#dapp .file-preview{display:none;margin-top:16px;padding:14px 16px;background:var(--input-bg);border:1px solid var(--card-border);border-radius:12px;align-items:center;gap:12px}
+#dapp .file-preview.active{display:flex}
+#dapp .file-preview-icon{font-size:22px}
+#dapp .file-preview-info{flex:1;min-width:0}
+#dapp .file-preview-name{font-size:14px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#dapp .file-preview-size{font-size:12px;color:var(--text-muted);margin-top:2px}
+#dapp .file-preview-remove{background:var(--card-border);border:none;font-size:18px;cursor:pointer;color:var(--text-muted);padding:6px 10px;border-radius:8px;transition:all .2s}
+#dapp .file-preview-remove:hover{background:var(--red);color:#fff}
+#dapp .ocr-scanning{display:none;margin-top:16px;padding:12px 16px;background:var(--input-bg);border:1px solid var(--card-border);border-radius:12px;align-items:center;gap:12px}
+#dapp .ocr-scanning.active{display:flex}
+#dapp .ocr-scanning .mini-spin{width:20px;height:20px;border:3px solid var(--card-border);border-top-color:var(--accent);border-radius:50%;animation:spin .7s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+#dapp .ocr-scanning span{font-size:13px;color:var(--text-muted);font-weight:500}
+#dapp .ocr-badge{display:none;margin-top:16px;padding:16px 18px;border-radius:12px;border:1px solid transparent}
+#dapp .ocr-badge.active{display:block}
+#dapp .ocr-badge .badge-header{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+#dapp .ocr-badge .badge-icon{font-size:20px}
+#dapp .ocr-badge .badge-label{font-size:14px;font-weight:700}
+#dapp .ocr-badge.ok{background:var(--green-light);border-color:#10b98155}
+#dapp .ocr-badge.ok .badge-label{color:var(--green)}
+#dapp .ocr-badge.doute{background:var(--orange-light);border-color:#f59e0b55}
+#dapp .ocr-badge.doute .badge-label{color:var(--orange)}
+#dapp .ocr-badge.erreur{background:var(--red-light);border-color:#ef444455}
+#dapp .ocr-badge.erreur .badge-label{color:var(--red)}
+#dapp .ocr-detail{font-size:13px;color:var(--text-muted);line-height:1.7}
+#dapp .ocr-detail .row{display:flex;justify-content:space-between;gap:8px}
+#dapp .ocr-detail .row-label{font-weight:600;color:var(--text);min-width:90px}
+#dapp .ocr-detail .row-ocr{color:var(--text-muted);font-style:italic}
+#dapp .ocr-detail .row-match{font-size:12px}
+#dapp .ocr-detail .match-ok{color:var(--green);font-weight:600}
+#dapp .ocr-detail .match-doute{color:var(--orange);font-weight:600}
+#dapp .ocr-detail .match-erreur{color:var(--red);font-weight:600}
+#dapp .btn{width:100%;padding:16px;border:none;border-radius:12px;font-size:15px;font-weight:600;cursor:pointer;transition:all .3s;font-family:inherit}
+#dapp .btn-primary{background:linear-gradient(135deg,#6366f1,#8b5cf6);color:#fff;box-shadow:0 4px 16px rgba(99,102,241,.4)}
+#dapp .btn-primary:hover{box-shadow:0 6px 24px rgba(99,102,241,.6);transform:translateY(-2px)}
+#dapp .btn-primary:disabled{opacity:.5;cursor:not-allowed}
+#dapp .btn-ghost{background:0 0;color:var(--text-muted);font-size:14px;padding:12px;margin-top:12px}
+#dapp .btn-ghost:hover{color:var(--accent)}
+#dapp .btn-ok{width:auto;padding:16px 28px}
+#dapp .spinner-wrap{display:none;text-align:center;padding:12px 0}
+#dapp .spinner-wrap.active{display:block}
+#dapp .spinner{display:inline-block;width:24px;height:24px;border:3px solid var(--card-border);border-top-color:var(--accent);border-radius:50%;animation:spin .8s linear infinite}
+#dapp .spinner-wrap p{font-size:13px;color:var(--text-muted);margin-top:10px}
+#dapp .toast{position:fixed;top:32px;left:50%;transform:translateX(-50%) translateY(-100px);transition:transform .4s;z-index:100;padding:16px 28px;border-radius:12px;font-size:14px;font-weight:600;box-shadow:0 8px 32px rgba(0,0,0,.5);backdrop-filter:blur(10px)}
+#dapp .toast.show{transform:translateX(-50%) translateY(0)}
+#dapp .toast.success{background:linear-gradient(135deg,#10b981,#059669);color:#fff}
+#dapp .toast.error{background:linear-gradient(135deg,#ef4444,#dc2626);color:#fff}
+#dapp .modal{display:none;position:fixed;inset:0;z-index:1000}
+#dapp .modal.active{display:flex;align-items:center;justify-content:center}
+#dapp .modal-overlay{position:absolute;inset:0;background:rgba(0,0,0,.8);backdrop-filter:blur(4px)}
+#dapp .modal-content{position:relative;background:var(--card);border:1px solid var(--card-border);border-radius:20px;width:90%;max-width:800px;max-height:80vh;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,.5)}
+#dapp .modal-header{display:flex;justify-content:space-between;align-items:center;padding:24px 32px;border-bottom:1px solid var(--card-border)}
+#dapp .modal-header h2{font-size:20px;font-weight:700}
+#dapp .modal-close{background:0 0;border:none;font-size:24px;color:var(--text-muted);cursor:pointer;padding:4px 8px}
+#dapp .modal-close:hover{color:var(--red)}
+#dapp .modal-body{padding:32px;max-height:60vh;overflow-y:auto}
+#dapp .history-table{width:100%;border-collapse:collapse;background:var(--card);border-radius:12px;overflow:hidden}
+#dapp .history-table th{background:var(--input-bg);padding:14px 16px;text-align:left;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--text-muted);border-bottom:1px solid var(--card-border)}
+#dapp .history-table td{padding:16px;border-bottom:1px solid var(--card-border);font-size:14px}
+#dapp .history-table tr:last-child td{border-bottom:none}
+#dapp .history-table tr:hover{background:var(--input-bg)}
+#dapp .motif-row{background:rgba(220,38,38,.1)!important}
+#dapp .motif-row:hover{background:rgba(220,38,38,.15)!important}
+#dapp .motif-row td{padding:12px 16px!important;border-bottom:1px solid var(--card-border)}
+#dapp .motif-content{color:var(--red);font-size:13px;font-style:italic;line-height:1.5}
+#dapp .status-badge{display:inline-block;padding:6px 12px;border-radius:8px;font-size:12px;font-weight:700}
+#dapp .status-badge.attente{background:var(--orange-light);color:var(--orange)}
+#dapp .status-badge.approuve{background:var(--green-light);color:var(--green)}
+#dapp .status-badge.rejete{background:var(--red-light);color:var(--red)}
+#dapp .history-empty{text-align:center;padding:60px 20px;color:var(--text-muted)}
+#dapp .history-empty-icon{font-size:48px;margin-bottom:16px;opacity:.5}
+@media(max-width:768px){
+#dapp{padding:20px 12px}
+#dapp .card{padding:24px 16px}
+#dapp .dw-container{max-width:100%}
+#dapp .greeting{margin-bottom:24px;padding-bottom:16px}
+#dapp .greeting h2{font-size:20px}
+#dapp .greeting p{font-size:11px}
+#dapp .dashboard-grid{grid-template-columns:1fr;gap:20px;max-width:100%;margin-bottom:32px}
+#dapp .dashboard-card{padding:20px 16px}
+#dapp .dashboard-header h3{font-size:14px}
+#dapp .dashboard-stats{grid-template-columns:repeat(2,1fr);gap:10px}
+#dapp .stat{min-width:auto;padding:14px 8px;min-height:80px}
+#dapp .stat-value{font-size:20px}
+#dapp .stat-label{font-size:8px;letter-spacing:0.5px}
+#dapp .stat-amount{font-size:11px}
+#dapp .btn-view-all{font-size:12px;padding:10px}
+#dapp .section-title{font-size:18px;margin-bottom:20px}
+#dapp .deposit-section{max-width:100%}
+#dapp .type-selector{grid-template-columns:1fr;gap:12px}
+#dapp .type-btn{padding:12px 16px;font-size:14px}
+#dapp .field label{font-size:11px}
+#dapp .field input,#dapp .select-input{padding:12px 14px;font-size:14px}
+#dapp .btn{padding:14px;font-size:15px}
+#dapp .declaration-card{padding:20px 16px;margin-bottom:20px}
+#dapp .declaration-header h3{font-size:16px}
+#dapp .declaration-subtitle{font-size:12px}
+#dapp .declaration-info-grid{grid-template-columns:1fr;gap:12px}
+#dapp .declaration-info-item{padding:12px}
+#dapp .declaration-info-label{font-size:10px}
+#dapp .declaration-info-value{font-size:18px}
+#dapp .declaration-notice{font-size:12px;padding:12px}
+#dapp .history-content{overflow-x:auto;-webkit-overflow-scrolling:touch}
+#dapp .history-table{font-size:12px;min-width:500px}
+#dapp .history-table th{padding:10px 8px;font-size:10px}
+#dapp .history-table td{padding:10px 8px;font-size:12px}
+#dapp .status-badge{padding:4px 8px;font-size:10px}
+#dapp .motif-content{font-size:11px}
+#dapp .modal-content{width:95%;max-width:95%;padding:20px 16px;max-height:90vh}
+#dapp .modal-header h2{font-size:18px}
+#dapp .modal-close{width:32px;height:32px;font-size:20px}
+#dapp .dropzone{padding:30px 16px}
+#dapp .dropzone-icon{font-size:32px}
+#dapp .dropzone-text{font-size:13px}
+#dapp .dropzone-sub{font-size:11px}
+#dapp .file-preview{padding:10px}
+#dapp .file-preview-name{font-size:13px}
+#dapp .ocr-badge{padding:12px}
+#dapp .badge-label{font-size:12px}
+#dapp .ocr-detail{font-size:11px}
+}
+</style>
+
+<div id="dapp">
+<div class="toast" id="toast"></div>
+<div class="dw-container">
+<div class="logo-area">
+<img src="https://cdn.prod.website-files.com/650c192147b5d025006e941a/650c77c42819d4010696e60c_Group%2013.svg" alt="Workerz">
+<h1>Gestion des Dépenses</h1>
+<p>Déposez vos justificatifs en toute simplicité</p>
+</div>
+
+<div class="card">
+<!-- LOGIN -->
+<div class="section active" id="sectionLogin">
+<div class="field">
+<label class="login-label">Nom</label>
+<input type="text" id="inputNom" placeholder="Votre nom" autocomplete="off">
+</div>
+<div class="field">
+<label class="login-label">Prénom</label>
+<input type="text" id="inputPrenom" placeholder="Votre prénom" autocomplete="off">
+</div>
+<div class="field">
+<label class="login-label">Mot de passe</label>
+<input type="password" id="inputPassword" placeholder="••••••••" autocomplete="off">
+</div>
+<button class="btn btn-primary" id="btnLogin">Se connecter</button>
+</div>
+
+<!-- DASHBOARD -->
+<div class="section" id="sectionDashboard">
+<div class="greeting">
+<div class="hello">Bonjour</div>
+<div class="name" id="greetName">–</div>
+</div>
+
+<div class="dashboard-grid">
+<div class="dashboard-card">
+<div class="dashboard-header"><h3>📝 Notes de frais</h3></div>
+<div class="dashboard-stats">
+<div class="stat">
+<div class="stat-value" id="statNotesCount">-</div>
+<div class="stat-label">Dépenses</div>
+</div>
+<div class="stat">
+<div class="stat-value" id="statNotesTotal">-</div>
+<div class="stat-label">Total approuvé</div>
+</div>
+<div class="stat">
+<div class="stat-value attente" id="statNotesAttente">-</div>
+<div class="stat-amount" id="statNotesAttenteAmount">-</div>
+<div class="stat-label">En attente</div>
+</div>
+<div class="stat">
+<div class="stat-value rejete" id="statNotesRejete">-</div>
+<div class="stat-amount" id="statNotesRejeteAmount">-</div>
+<div class="stat-label">Rejeté</div>
+</div>
+</div>
+<button class="btn-view-all" data-type="notes">Voir l'historique →</button>
+</div>
+
+<div class="dashboard-card">
+<div class="dashboard-header"><h3>🏢 Frais de siège</h3></div>
+<div class="dashboard-stats">
+<div class="stat"><div class="stat-value" id="statSiegeCount">0</div><div class="stat-label">Dépenses</div></div>
+<div class="stat"><div class="stat-value" id="statSiegeTotal">0 €</div><div class="stat-label">Total approuvé</div></div>
+<div class="stat"><div class="stat-value attente" id="statSiegeAttente">0</div><div class="stat-amount" id="statSiegeAttenteAmount">0 €</div><div class="stat-label">En attente</div></div>
+<div class="stat"><div class="stat-value rejete" id="statSiegeRejete">0</div><div class="stat-amount" id="statSiegeRejeteAmount">0 €</div><div class="stat-label">Rejeté</div></div>
+</div>
+<button class="btn-view-all" data-type="siege">Voir l'historique →</button>
+</div>
+</div>
+
+<div class="divider-section"></div>
+
+<!-- FORMULAIRE -->
+<div class="deposit-section">
+<h2 class="section-title">Déposer une dépense</h2>
+
+<div class="field">
+<label>Type de dépense</label>
+<div class="type-selector">
+<button class="type-btn active" data-depense="notes">📝 Notes de frais</button>
+<button class="type-btn" data-depense="siege">🏢 Frais de siège</button>
+</div>
+</div>
+
+<!-- FORM NOTES DE FRAIS -->
+<div id="formNotes" class="form-type-content active">
+<div class="field"><label>Fournisseur</label><input type="text" id="inputFournisseur" placeholder="Nom du fournisseur"></div>
+<div class="field"><label>Date</label><input type="date" id="inputDate"></div>
+<div class="field"><label>Montant TTC (€)</label><input type="number" id="inputMontant" step="0.01" min="0" placeholder="0.00"></div>
+<div class="field"><label>Élément</label><input type="text" id="inputElement" placeholder="Description…"></div>
+<div class="divider"></div>
+<div class="field">
+<label>Pièce jointe</label>
+<div class="dropzone" id="dropzone">
+<input type="file" id="inputFile" accept="image/*,.pdf">
+<div class="dropzone-icon">📄</div>
+<div class="dropzone-text">Glissez un fichier ici</div>
+<div class="dropzone-sub">Images/PDF acceptés</div>
+</div>
+<div class="file-preview" id="filePreview">
+<span class="file-preview-icon">📎</span>
+<div class="file-preview-info">
+<div class="file-preview-name" id="fpName">–</div>
+<div class="file-preview-size" id="fpSize">–</div>
+</div>
+<button class="file-preview-remove" id="btnRemove">✕</button>
+</div>
+<div class="ocr-scanning" id="ocrScanning"><div class="mini-spin"></div><span>Analyse OCR…</span></div>
+<div class="ocr-badge" id="ocrBadge">
+<div class="badge-header">
+<span class="badge-icon" id="badgeIcon">–</span>
+<span class="badge-label" id="badgeLabel">–</span>
+</div>
+<div class="ocr-detail" id="ocrDetail"></div>
+</div>
+</div>
+<div class="divider"></div>
+<div class="spinner-wrap" id="spinnerWrap"><div class="spinner"></div><p>Envoi en cours…</p></div>
+<button class="btn btn-primary" id="btnSubmit">Envoyer</button>
+</div>
+
+<!-- DÉCLARATION FRAIS DE SIÈGE -->
+<div id="declarationSiege" class="declaration-card" style="display:none">
+<div class="declaration-header">
+<h3>📋 Déclaration Frais de siège</h3>
+<p class="declaration-subtitle">Remplissez ces informations une seule fois</p>
+</div>
+
+<div id="declarationForm" class="declaration-form">
+<div class="field"><label>Superficie totale habitation (m²)</label><input type="number" id="inputSuperficieTotale" step="0.01" min="0" placeholder="Ex: 100"></div>
+<div class="field"><label>Superficie bureau (m²)</label><input type="number" id="inputSuperficieBureau" step="0.01" min="0" placeholder="Ex: 15"></div>
+<div class="field"><label>Statut</label>
+<select id="inputStatut" class="select-input">
+<option value="">-- Sélectionner --</option>
+<option value="Propriétaire">Propriétaire</option>
+<option value="Locataire">Locataire</option>
+</select>
+</div>
+<button class="btn btn-primary" id="btnSaveDeclaration">Enregistrer la déclaration</button>
+</div>
+
+<div id="declarationDisplay" class="declaration-display" style="display:none">
+<div class="declaration-info-grid">
+<div class="declaration-info-item">
+<span class="declaration-info-label">Superficie totale</span>
+<span class="declaration-info-value" id="displaySuperficieTotale">-</span>
+</div>
+<div class="declaration-info-item">
+<span class="declaration-info-label">Superficie bureau</span>
+<span class="declaration-info-value" id="displaySuperficieBureau">-</span>
+</div>
+<div class="declaration-info-item">
+<span class="declaration-info-label">Pourcentage</span>
+<span class="declaration-info-value" id="displayPourcentage">-</span>
+</div>
+<div class="declaration-info-item">
+<span class="declaration-info-label">Statut</span>
+<span class="declaration-info-value" id="displayStatut">-</span>
+</div>
+</div>
+<div class="declaration-notice">
+<strong>ℹ️ Rappel remboursement :</strong><br>
+• Frais de siège : <span id="noticePercent">-</span> du montant sera remboursé<br>
+• Télécommunication (Internet & Téléphone) : <span id="noticeTelecom">80%</span> du montant sera remboursé
+</div>
+<p class="declaration-readonly-note">💡 Ces informations ne peuvent être modifiées que par un administrateur</p>
+</div>
+</div>
+
+<!-- FORM FRAIS DE SIÈGE -->
+<div id="formSiege" class="form-type-content">
+<div class="field"><label>Fournisseur</label><input type="text" id="inputFournisseurSiege" placeholder="Nom du fournisseur"></div>
+<div class="field"><label>Date</label><input type="date" id="inputDateSiege"></div>
+<div class="field"><label>Montant TTC (€)</label><input type="number" id="inputMontantSiege" step="0.01" min="0" placeholder="0.00"></div>
+<div class="field"><label>Élément</label><input type="text" id="inputElementSiege" placeholder="Description…"></div>
+<div class="divider"></div>
+<div class="field">
+<label>Pièce jointe</label>
+<div class="dropzone" id="dropzoneSiege">
+<input type="file" id="inputFileSiege" accept="image/*,.pdf">
+<div class="dropzone-icon">📄</div>
+<div class="dropzone-text">Glissez un fichier ici</div>
+<div class="dropzone-sub">Images/PDF acceptés</div>
+</div>
+<div class="file-preview" id="filePreviewSiege">
+<span class="file-preview-icon">📎</span>
+<div class="file-preview-info">
+<div class="file-preview-name" id="fpNameSiege">–</div>
+<div class="file-preview-size" id="fpSizeSiege">–</div>
+</div>
+<button class="file-preview-remove" id="btnRemoveSiege">✕</button>
+</div>
+<div class="ocr-scanning" id="ocrScanningSiege"><div class="mini-spin"></div><span>Analyse OCR…</span></div>
+<div class="ocr-badge" id="ocrBadgeSiege">
+<div class="badge-header">
+<span class="badge-icon" id="badgeIconSiege">–</span>
+<span class="badge-label" id="badgeLabelSiege">–</span>
+</div>
+<div class="ocr-detail" id="ocrDetailSiege"></div>
+</div>
+</div>
+<div class="divider"></div>
+<div class="spinner-wrap" id="spinnerWrapSiege"><div class="spinner"></div><p>Envoi en cours…</p></div>
+<button class="btn btn-primary" id="btnSubmitSiege">Envoyer</button>
+</div>
+</div>
+
+<button class="btn btn-ghost" id="btnLogout">Déconnexion</button>
+</div>
+</div>
+
+<!-- MODAL HISTORIQUE -->
+<div class="modal" id="modalHistory">
+<div class="modal-overlay" id="modalOverlay"></div>
+<div class="modal-content">
+<div class="modal-header">
+<h2 id="modalTitle">Historique</h2>
+<button class="modal-close" id="btnCloseModal">✕</button>
+</div>
+<div class="modal-body" id="historyContent"></div>
+</div>
+</div>
+
+</div>
+</div>
+
+<script>
+const SCRIPT_URL='https://script.google.com/macros/s/AKfycbxuE78Ga9GRS1b-OY0Aqsv7DO3bpEWShJavR2GyVO3eBF6x4F6HWxsB5f9Jw9YWJipt7Q/exec';
+let user={code:null,nom:null,prenom:null},file=null,ocrText='',ocrResult=null,currentType='notes';window.ocrResultDetails='';
+let fileSiege=null,ocrTextSiege='',ocrResultSiege=null;window.ocrResultDetailsSiege='';
+
+document.addEventListener('DOMContentLoaded',()=>{
+document.getElementById('inputDate').value=new Date().toISOString().split('T')[0];
+document.getElementById('inputDateSiege').value=new Date().toISOString().split('T')[0];
+document.getElementById('btnLogin').onclick=login;
+document.getElementById('inputPassword').onkeydown=e=>{if(e.key==='Enter')login()};
+document.getElementById('btnLogout').onclick=logout;
+document.getElementById('btnSubmit').onclick=submit;
+document.getElementById('btnSubmitSiege').onclick=submitSiege;
+document.getElementById('btnSaveDeclaration').onclick=saveDeclaration;
+document.getElementById('btnRemove').onclick=removeFile;
+document.getElementById('btnRemoveSiege').onclick=removeFileSiege;
+document.querySelectorAll('.type-btn').forEach(b=>b.onclick=function(){
+currentType=this.getAttribute('data-depense');
+document.querySelectorAll('.type-btn').forEach(x=>x.classList.remove('active'));
+this.classList.add('active');
+document.querySelectorAll('.form-type-content').forEach(f=>f.classList.remove('active'));
+document.getElementById('form'+(currentType==='notes'?'Notes':'Siege')).classList.add('active');
+if(currentType==='siege'){document.getElementById('declarationSiege').style.display='block'}else{document.getElementById('declarationSiege').style.display='none'}
+});
+document.querySelectorAll('.btn-view-all').forEach(b=>b.onclick=function(){
+const type=this.getAttribute('data-type');
+showHistory(type);
+});
+document.getElementById('btnCloseModal').onclick=()=>document.getElementById('modalHistory').classList.remove('active');
+document.getElementById('modalOverlay').onclick=()=>document.getElementById('modalHistory').classList.remove('active');
+const dz=document.getElementById('dropzone');
+dz.ondragover=e=>{e.preventDefault();dz.classList.add('over')};
+dz.ondragleave=()=>dz.classList.remove('over');
+dz.ondrop=e=>{e.preventDefault();dz.classList.remove('over');if(e.dataTransfer.files.length)setFile(e.dataTransfer.files[0])};
+document.getElementById('inputFile').onchange=e=>{if(e.target.files.length)setFile(e.target.files[0])};
+const dzs=document.getElementById('dropzoneSiege');
+dzs.ondragover=e=>{e.preventDefault();dzs.classList.add('over')};
+dzs.ondragleave=()=>dzs.classList.remove('over');
+dzs.ondrop=e=>{e.preventDefault();dzs.classList.remove('over');if(e.dataTransfer.files.length)setFileSiege(e.dataTransfer.files[0])};
+document.getElementById('inputFileSiege').onchange=e=>{if(e.target.files.length)setFileSiege(e.target.files[0])};
+['inputFournisseur','inputDate','inputMontant'].forEach(id=>{
+document.getElementById(id).oninput=()=>{if(ocrText)compareOCR()}
+});
+['inputDateSiege','inputMontantSiege'].forEach(id=>{
+document.getElementById(id).oninput=()=>{if(ocrTextSiege)compareOCRSiege()}
+});
+});
+
+let _tt;function toast(m,t='success'){const e=document.getElementById('toast');e.textContent=m;e.className='toast '+t+' show';clearTimeout(_tt);_tt=setTimeout(()=>e.classList.remove('show'),3200)}
+function show(id){document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active')}
+
+async function login(){const n=document.getElementById('inputNom').value.trim(),p=document.getElementById('inputPrenom').value.trim(),pw=document.getElementById('inputPassword').value.trim();if(!n)return toast('Entrez votre nom','error');if(!p)return toast('Entrez votre prénom','error');if(!pw)return toast('Entrez votre mot de passe','error');try{const r=await(await fetch(SCRIPT_URL+'?action=auth&nom='+encodeURIComponent(n)+'&prenom='+encodeURIComponent(p)+'&password='+encodeURIComponent(pw))).json();if(r.success){user={code:r.code,nom:r.nom,prenom:r.prenom};document.getElementById('greetName').textContent=r.prenom+' '+r.nom;show('sectionDashboard');loadDashboard();loadDeclarationSiege();toast('Bienvenue '+r.prenom+' !')}else toast('Identifiants incorrects','error')}catch(e){toast('Erreur','error')}}
+
+function logout(){user={code:null,nom:null,prenom:null};file=null;ocrText='';ocrResult=null;document.getElementById('inputNom').value='';document.getElementById('inputPrenom').value='';document.getElementById('inputPassword').value='';resetForm();show('sectionLogin')}
+
+async function loadDashboard(){try{const r=await(await fetch(SCRIPT_URL+'?action=history&code='+encodeURIComponent(user.code))).json();if(r.success&&r.records){const notes=r.records.filter(x=>x.type==='Notes de frais');const siege=r.records.filter(x=>x.type==='Frais de siège');const countN=notes.length;const approuvesN=notes.filter(x=>x.checking&&x.checking.includes('Approuvé'));const rejetesN=notes.filter(x=>x.checking&&x.checking.includes('Rejeté'));const attenteN=notes.filter(x=>x.checking&&x.checking.includes('attente'));const totalApprouvesN=approuvesN.reduce((s,x)=>s+parseFloat(x.montant||0),0);const totalAttenteN=attenteN.reduce((s,x)=>s+parseFloat(x.montant||0),0);const totalRejetesN=rejetesN.reduce((s,x)=>s+parseFloat(x.montant||0),0);document.getElementById('statNotesCount').textContent=countN;document.getElementById('statNotesTotal').textContent=totalApprouvesN.toFixed(2)+' €';document.getElementById('statNotesAttente').textContent=attenteN.length;document.getElementById('statNotesAttenteAmount').textContent=totalAttenteN.toFixed(2)+' €';document.getElementById('statNotesRejete').textContent=rejetesN.length;document.getElementById('statNotesRejeteAmount').textContent=totalRejetesN.toFixed(2)+' €';const countS=siege.length;const approuvesS=siege.filter(x=>x.checking&&x.checking.includes('Approuvé'));const rejetesS=siege.filter(x=>x.checking&&x.checking.includes('Rejeté'));const attenteS=siege.filter(x=>x.checking&&x.checking.includes('attente'));const totalApprouvesS=approuvesS.reduce((s,x)=>s+parseFloat(x.montant||0),0);const totalAttenteS=attenteS.reduce((s,x)=>s+parseFloat(x.montant||0),0);const totalRejetesS=rejetesS.reduce((s,x)=>s+parseFloat(x.montant||0),0);document.getElementById('statSiegeCount').textContent=countS;document.getElementById('statSiegeTotal').textContent=totalApprouvesS.toFixed(2)+' €';document.getElementById('statSiegeAttente').textContent=attenteS.length;document.getElementById('statSiegeAttenteAmount').textContent=totalAttenteS.toFixed(2)+' €';document.getElementById('statSiegeRejete').textContent=rejetesS.length;document.getElementById('statSiegeRejeteAmount').textContent=totalRejetesS.toFixed(2)+' €'}else{document.getElementById('statNotesCount').textContent='0';document.getElementById('statNotesTotal').textContent='0 €';document.getElementById('statNotesAttente').textContent='0';document.getElementById('statNotesAttenteAmount').textContent='0 €';document.getElementById('statNotesRejete').textContent='0';document.getElementById('statNotesRejeteAmount').textContent='0 €';document.getElementById('statSiegeCount').textContent='0';document.getElementById('statSiegeTotal').textContent='0 €';document.getElementById('statSiegeAttente').textContent='0';document.getElementById('statSiegeAttenteAmount').textContent='0 €';document.getElementById('statSiegeRejete').textContent='0';document.getElementById('statSiegeRejeteAmount').textContent='0 €'}}catch(e){console.error(e)}}
+
+function showHistory(type){const title=type==='notes'?'📝 Historique Notes de frais':'🏢 Historique Frais de siège';document.getElementById('modalTitle').textContent=title;loadHistory(type);document.getElementById('modalHistory').classList.add('active')}
+
+async function loadHistory(type){const c=document.getElementById('historyContent');c.innerHTML='<div style="text-align:center;padding:40px"><div class="spinner"></div></div>';try{const r=await(await fetch(SCRIPT_URL+'?action=history&code='+encodeURIComponent(user.code))).json();if(r.success&&r.records&&r.records.length>0){const typeLabel=type==='notes'?'Notes de frais':'Frais de siège';const filtered=r.records.filter(x=>x.type===typeLabel);if(filtered.length>0){let h='<table class="history-table"><thead><tr><th>Date</th><th>Fournisseur</th><th>Montant</th><th>Statut</th></tr></thead><tbody>';filtered.forEach(x=>{const sc=x.checking&&x.checking.includes('Approuvé')?'approuve':x.checking&&x.checking.includes('Rejeté')?'rejete':'attente';const st=x.checking&&x.checking.includes('Approuvé')?'Approuvé':x.checking&&x.checking.includes('Rejeté')?'Rejeté':'En attente';h+=`<tr><td>${x.date}</td><td>${x.fournisseur||'-'}</td><td>${x.montant} €</td><td><span class="status-badge ${sc}">${st}</span></td></tr>`;if(x.checking&&x.checking.includes('Rejeté')&&x.motifRefus){h+=`<tr class="motif-row"><td colspan="4"><div class="motif-content"><strong>🚫 Motif du refus :</strong> ${x.motifRefus}</div></td></tr>`}});h+='</tbody></table>';c.innerHTML=h}else c.innerHTML='<div class="history-empty"><div class="history-empty-icon">📋</div><p>Aucune dépense</p></div>'}else c.innerHTML='<div class="history-empty"><div class="history-empty-icon">📋</div><p>Aucune dépense</p></div>'}catch(e){c.innerHTML='<div class="history-empty"><div class="history-empty-icon">⚠️</div><p>Erreur</p></div>'}}
+
+function setFile(f){const maxSize=2*1024*1024;if(f.size>maxSize){toast('Fichier trop volumineux (max 2 Mo)','error');document.getElementById('inputFile').value='';return}file=f;document.getElementById('fpName').textContent=f.name;document.getElementById('fpSize').textContent=fmtSize(f.size);document.getElementById('filePreview').classList.add('active');runOCR(f)}
+
+function removeFile(){file=null;ocrText='';ocrResult=null;document.getElementById('inputFile').value='';document.getElementById('filePreview').classList.remove('active');hideBadge();document.getElementById('ocrScanning').classList.remove('active')}
+
+function fmtSize(b){return b<1024?b+' o':b<1048576?(b/1024).toFixed(1)+' Ko':(b/1048576).toFixed(1)+' Mo'}
+
+async function runOCR(f){document.getElementById('ocrScanning').classList.add('active');hideBadge();try{let t='';if(f.type==='application/pdf')t=await pdfOCR(f);else{const u=URL.createObjectURL(f);t=(await Tesseract.recognize(u,'fra')).data.text;URL.revokeObjectURL(u)}ocrText=t;document.getElementById('ocrScanning').classList.remove('active');compareOCR()}catch(e){console.error(e);document.getElementById('ocrScanning').classList.remove('active');ocrResult=null;toast('OCR échoué','error')}}
+
+async function pdfOCR(pdfFile){const ab=await pdfFile.arrayBuffer(),pdf=await pdfjsLib.getDocument({data:ab}).promise,np=pdf.numPages;let txt='';for(let pn=1;pn<=np;pn++){const pg=await pdf.getPage(pn),vp=pg.getViewport({scale:2}),cv=document.createElement('canvas'),cx=cv.getContext('2d');cv.width=vp.width;cv.height=vp.height;await pg.render({canvasContext:cx,viewport:vp}).promise;const bl=await new Promise(r=>{cv.toBlob(r,'image/png')}),iu=URL.createObjectURL(bl);txt+=(await Tesseract.recognize(iu,'fra')).data.text+'\n\n';URL.revokeObjectURL(iu);const sm=document.querySelector('#ocrScanning span');if(sm)sm.textContent=`Analyse… (page ${pn}/${np})`}return txt.trim()}
+
+function compareOCR(){const f=document.getElementById('inputFournisseur').value.trim(),d=document.getElementById('inputDate').value,m=document.getElementById('inputMontant').value,t=ocrText.toLowerCase();let fm='erreur';if(f){const w=f.toLowerCase().split(/\s+/).filter(x=>x.length>1&&t.includes(x)).length;fm=w===f.split(/\s+/).length?'ok':w>0?'doute':'erreur'}else fm='doute';let dm='erreur';if(d){const[y,mo,dy]=d.split('-'),ml=['janvier','février','mars','avril','mai','juin','juillet','août','septembre','octobre','novembre','décembre'],ms=['janv','févr','fév','mars','avr','mai','juin','juil','août','sept','oct','nov','déc'],mi=parseInt(mo)-1,mlo=ml[mi],msh=ms[mi],dj=parseInt(dy).toString(),ys=y.slice(2),fmt=[d,`${dy}/${mo}/${y}`,`${dj}/${mo}/${y}`,`${dy}/${mo}/${ys}`,`${dj}/${mo}/${ys}`,`${dy}.${mo}.${y}`,`${dj}.${mo}.${y}`,`${dy}-${mo}-${y}`,`${dj}-${mo}-${y}`,`${mo}/${dy}/${y}`,`${dj} ${mlo} ${y}`,`${dy} ${mlo} ${y}`,`${dj} ${mlo.slice(0,3)} ${y}`,`${dy} ${mlo.slice(0,3)} ${y}`,`${dj} ${mlo.slice(0,4)} ${y}`,`${dj} ${msh} ${y}`,`${dy} ${msh} ${y}`,`${dj} ${msh}. ${y}`,`${dy} ${msh}. ${y}`,`${dj} ${mlo}`,`${dj}/${mo}`,`${dy}/${mo}`];dm=fmt.some(x=>t.includes(x.toLowerCase()))?'ok':t.includes(dj)||t.includes(dy)?t.includes(mo)||t.includes(mlo)||t.includes(msh)||t.includes(mlo.slice(0,3))?'doute':'erreur':'erreur'}else dm='doute';let mm='erreur';if(m){const v=parseFloat(m),vs=v.toFixed(2),vc=vs.replace('.',','),vi=v%1===0?v.toFixed(0):null,vsp=vc.replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1 '),p=[vs,vc,vsp];if(vi)p.push(vi);if(p.some(x=>t.includes(x)))mm='ok';else{const n=(t.match(/[\d\s]+[.,]?[\d]*/g)||[]).map(x=>parseFloat(x.replace(/\s/g,'').replace(',','.'))).filter(x=>!isNaN(x));mm=n.some(x=>Math.abs(x-v)/v<.05)?'doute':'erreur'}}else mm='doute';const ch=[fm,dm,mm],fn=['Fournisseur','Date','Montant'];ocrResult=ch.every(x=>x==='ok')?'OK':ch.some(x=>x==='erreur')?'Erreur':'Doute';const pf=[];ch.forEach((s,i)=>{if(s==='erreur')pf.push(fn[i]+'✕');else if(s==='doute')pf.push(fn[i]+'⚠')});window.ocrResultDetails=pf.length>0?pf.join(', '):'';showBadge(ocrResult,{fournisseur:{saisi:f||'—',match:fm},date:{saisi:d||'—',match:dm},montant:{saisi:m?m+'€':'—',match:mm}})}
+
+function showBadge(r,d){const b=document.getElementById('ocrBadge');b.classList.add('active');b.className='ocr-badge active '+r.toLowerCase();const ic={OK:'✓',Doute:'⚠',Erreur:'✕'};document.getElementById('badgeIcon').textContent=ic[r];document.getElementById('badgeLabel').textContent=r==='OK'?'Facture vérifié':r==='Doute'?'Doute':'Erreur';let h='';for(const[k,v]of Object.entries(d)){const l=k==='fournisseur'?'Fournisseur':k==='date'?'Date':'Montant',mt=v.match==='ok'?'✓ trouvé':v.match==='doute'?'⚠ incertain':'✕ non trouvé',mc='match-'+v.match;h+=`<div class="row"><span class="row-label">${l}</span><span class="row-ocr">${v.saisi}</span><span class="row-match ${mc}">${mt}</span></div>`}document.getElementById('ocrDetail').innerHTML=h}
+
+function hideBadge(){document.getElementById('ocrBadge').classList.remove('active');ocrResult=null}
+
+async function submit(){const f=document.getElementById('inputFournisseur').value.trim(),d=document.getElementById('inputDate').value,m=document.getElementById('inputMontant').value,e=document.getElementById('inputElement').value.trim();if(!f)return toast('Remplissez le Fournisseur','error');if(!d)return toast('Choisissez une Date','error');if(!m||parseFloat(m)<=0)return toast('Montant > 0','error');if(!file)return toast('Ajoutez une pièce jointe','error');const b64=await toB64(file);document.getElementById('btnSubmit').disabled=true;document.getElementById('spinnerWrap').classList.add('active');try{const r=await(await fetch(SCRIPT_URL,{method:'POST',body:JSON.stringify({action:'submit',code:user.code,nom:user.nom,prenom:user.prenom,fournisseur:f,date:d,montant:m,element:e,correspondance:ocrResult||'Doute',correspondanceDetails:window.ocrResultDetails||'',fileName:file.name,fileData:b64,mimeType:file.type||'application/octet-stream',type:currentType})})).json();if(r.success){toast('Dépense enregistrée ✓');resetForm();loadDashboard()}else toast(r.error||'Erreur','error')}catch(err){toast('Erreur envoi','error')}finally{document.getElementById('btnSubmit').disabled=false;document.getElementById('spinnerWrap').classList.remove('active')}}
+
+function resetForm(){document.getElementById('inputFournisseur').value='';document.getElementById('inputDate').value=new Date().toISOString().split('T')[0];document.getElementById('inputMontant').value='';document.getElementById('inputElement').value='';removeFile()}
+
+function toB64(f){return new Promise((res,rej)=>{const r=new FileReader;r.onload=e=>res(e.target.result.split(',')[1]);r.onerror=rej;r.readAsDataURL(f)})}
+
+// ═══════════════════════════════════════════════════════
+// FRAIS DE SIÈGE FUNCTIONS
+// ═══════════════════════════════════════════════════════
+
+function setFileSiege(f){const maxSize=2*1024*1024;if(f.size>maxSize){toast('Fichier trop volumineux (max 2 Mo)','error');document.getElementById('inputFileSiege').value='';return}fileSiege=f;document.getElementById('fpNameSiege').textContent=f.name;document.getElementById('fpSizeSiege').textContent=fmtSize(f.size);document.getElementById('filePreviewSiege').classList.add('active');runOCRSiege(f)}
+
+function removeFileSiege(){fileSiege=null;ocrTextSiege='';ocrResultSiege=null;document.getElementById('inputFileSiege').value='';document.getElementById('filePreviewSiege').classList.remove('active');hideBadgeSiege();document.getElementById('ocrScanningSiege').classList.remove('active')}
+
+async function runOCRSiege(f){document.getElementById('ocrScanningSiege').classList.add('active');hideBadgeSiege();try{let t='';if(f.type==='application/pdf')t=await pdfOCRSiege(f);else{const u=URL.createObjectURL(f);t=(await Tesseract.recognize(u,'fra')).data.text;URL.revokeObjectURL(u)}ocrTextSiege=t;document.getElementById('ocrScanningSiege').classList.remove('active');compareOCRSiege()}catch(e){console.error(e);document.getElementById('ocrScanningSiege').classList.remove('active');ocrResultSiege=null;toast('OCR échoué','error')}}
+
+async function pdfOCRSiege(pdfFile){const ab=await pdfFile.arrayBuffer(),pdf=await pdfjsLib.getDocument({data:ab}).promise,np=pdf.numPages;let txt='';for(let pn=1;pn<=np;pn++){const pg=await pdf.getPage(pn),vp=pg.getViewport({scale:2}),cv=document.createElement('canvas'),cx=cv.getContext('2d');cv.width=vp.width;cv.height=vp.height;await pg.render({canvasContext:cx,viewport:vp}).promise;const bl=await new Promise(r=>{cv.toBlob(r,'image/png')}),iu=URL.createObjectURL(bl);txt+=(await Tesseract.recognize(iu,'fra')).data.text+'\n\n';URL.revokeObjectURL(iu);const sm=document.querySelector('#ocrScanningSiege span');if(sm)sm.textContent=`Analyse… (page ${pn}/${np})`}return txt.trim()}
+
+function compareOCRSiege(){const d=document.getElementById('inputDateSiege').value,m=document.getElementById('inputMontantSiege').value,t=ocrTextSiege.toLowerCase();const nom=user.nom.toLowerCase(),prenom=user.prenom.toLowerCase();let nm='erreur';if(t.includes(nom)&&t.includes(prenom))nm='ok';else if(t.includes(nom)||t.includes(prenom))nm='doute';else nm='erreur';let dm='erreur';if(d){const[y,mo,dy]=d.split('-'),ml=['janvier','février','mars','avril','mai','juin','juillet','août','septembre','octobre','novembre','décembre'],ms=['janv','févr','fév','mars','avr','mai','juin','juil','août','sept','oct','nov','déc'],mi=parseInt(mo)-1,mlo=ml[mi],msh=ms[mi],dj=parseInt(dy).toString(),ys=y.slice(2),fmt=[d,`${dy}/${mo}/${y}`,`${dj}/${mo}/${y}`,`${dy}/${mo}/${ys}`,`${dj}/${mo}/${ys}`,`${dy}.${mo}.${y}`,`${dj}.${mo}.${y}`,`${dy}-${mo}-${y}`,`${dj}-${mo}-${y}`,`${mo}/${dy}/${y}`,`${dj} ${mlo} ${y}`,`${dy} ${mlo} ${y}`,`${dj} ${mlo.slice(0,3)} ${y}`,`${dy} ${mlo.slice(0,3)} ${y}`,`${dj} ${mlo.slice(0,4)} ${y}`,`${dj} ${msh} ${y}`,`${dy} ${msh} ${y}`,`${dj} ${msh}. ${y}`,`${dy} ${msh}. ${y}`,`${dj} ${mlo}`,`${dj}/${mo}`,`${dy}/${mo}`];dm=fmt.some(x=>t.includes(x.toLowerCase()))?'ok':t.includes(dj)||t.includes(dy)?t.includes(mo)||t.includes(mlo)||t.includes(msh)||t.includes(mlo.slice(0,3))?'doute':'erreur':'erreur'}else dm='doute';let mm='erreur';if(m){const v=parseFloat(m),vs=v.toFixed(2),vc=vs.replace('.',','),vi=v%1===0?v.toFixed(0):null,vsp=vc.replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1 '),p=[vs,vc,vsp];if(vi)p.push(vi);if(p.some(x=>t.includes(x)))mm='ok';else{const n=(t.match(/[\d\s]+[.,]?[\d]*/g)||[]).map(x=>parseFloat(x.replace(/\s/g,'').replace(',','.'))).filter(x=>!isNaN(x));mm=n.some(x=>Math.abs(x-v)/v<.05)?'doute':'erreur'}}else mm='doute';const ch=[nm,dm,mm],fn=['Nom/Prénom','Date','Montant'];ocrResultSiege=ch.every(x=>x==='ok')?'OK':ch.some(x=>x==='erreur')?'Erreur':'Doute';const pf=[];ch.forEach((s,i)=>{if(s==='erreur')pf.push(fn[i]+'✕');else if(s==='doute')pf.push(fn[i]+'⚠')});window.ocrResultDetailsSiege=pf.length>0?pf.join(', '):'';showBadgeSiege(ocrResultSiege,{nomprenom:{saisi:user.prenom+' '+user.nom,match:nm},date:{saisi:d||'—',match:dm},montant:{saisi:m?m+'€':'—',match:mm}})}
+
+function showBadgeSiege(r,d){const b=document.getElementById('ocrBadgeSiege');b.classList.add('active');b.className='ocr-badge active '+r.toLowerCase();const ic={OK:'✓',Doute:'⚠',Erreur:'✕'};document.getElementById('badgeIconSiege').textContent=ic[r];document.getElementById('badgeLabelSiege').textContent=r==='OK'?'Facture vérifié':r==='Doute'?'Doute':'Erreur';let h='';for(const[k,v]of Object.entries(d)){const l=k==='nomprenom'?'Nom/Prénom':k==='date'?'Date':'Montant',mt=v.match==='ok'?'✓ trouvé':v.match==='doute'?'⚠ incertain':'✕ non trouvé',mc='match-'+v.match;h+=`<div class="row"><span class="row-label">${l}</span><span class="row-ocr">${v.saisi}</span><span class="row-match ${mc}">${mt}</span></div>`}document.getElementById('ocrDetailSiege').innerHTML=h}
+
+function hideBadgeSiege(){document.getElementById('ocrBadgeSiege').classList.remove('active');ocrResultSiege=null}
+
+async function submitSiege(){const f=document.getElementById('inputFournisseurSiege').value.trim(),d=document.getElementById('inputDateSiege').value,m=document.getElementById('inputMontantSiege').value,e=document.getElementById('inputElementSiege').value.trim();if(!d)return toast('Choisissez une Date','error');if(!m||parseFloat(m)<=0)return toast('Montant > 0','error');if(!fileSiege)return toast('Ajoutez une pièce jointe','error');const b64=await toB64(fileSiege);document.getElementById('btnSubmitSiege').disabled=true;document.getElementById('spinnerWrapSiege').classList.add('active');try{const r=await(await fetch(SCRIPT_URL,{method:'POST',body:JSON.stringify({action:'submit',code:user.code,nom:user.nom,prenom:user.prenom,fournisseur:f,date:d,montant:m,element:e,correspondance:ocrResultSiege||'Doute',correspondanceDetails:window.ocrResultDetailsSiege||'',fileName:fileSiege.name,fileData:b64,mimeType:fileSiege.type||'application/octet-stream',type:'siege'})})).json();if(r.success){toast('Dépense enregistrée ✓');resetFormSiege();loadDashboard()}else toast(r.error||'Erreur','error')}catch(err){toast('Erreur envoi','error')}finally{document.getElementById('btnSubmitSiege').disabled=false;document.getElementById('spinnerWrapSiege').classList.remove('active')}}
+
+function resetFormSiege(){document.getElementById('inputFournisseurSiege').value='';document.getElementById('inputDateSiege').value=new Date().toISOString().split('T')[0];document.getElementById('inputMontantSiege').value='';document.getElementById('inputElementSiege').value='';removeFileSiege()}
+
+// ═══════════════════════════════════════════════════════
+// DÉCLARATION FRAIS DE SIÈGE
+// ═══════════════════════════════════════════════════════
+
+async function loadDeclarationSiege(){try{const r=await(await fetch(SCRIPT_URL+'?action=getDeclaration&code='+encodeURIComponent(user.code)+'&nom='+encodeURIComponent(user.nom)+'&prenom='+encodeURIComponent(user.prenom))).json();if(r.success){if(r.declared){document.getElementById('declarationForm').style.display='none';document.getElementById('declarationDisplay').style.display='block';document.getElementById('displaySuperficieTotale').textContent=r.superficieTotale+' m²';document.getElementById('displaySuperficieBureau').textContent=r.superficieBureau+' m²';let pourcentageDisplay=r.pourcentage;if(typeof r.pourcentage==='number'){pourcentageDisplay=(r.pourcentage*100).toFixed(2)+'%'}else{pourcentageDisplay=r.pourcentage}document.getElementById('displayPourcentage').textContent=pourcentageDisplay;document.getElementById('displayStatut').textContent=r.statut;document.getElementById('noticePercent').textContent=pourcentageDisplay;const tauxT=r.tauxTelecom;let tauxTDisplay='80%';if(typeof tauxT==='number'){tauxTDisplay=(tauxT*100).toFixed(0)+'%'}else if(tauxT){tauxTDisplay=tauxT.toString()}document.getElementById('noticeTelecom').textContent=tauxTDisplay}else{document.getElementById('declarationForm').style.display='block';document.getElementById('declarationDisplay').style.display='none'}}}catch(e){console.error(e)}}
+
+async function saveDeclaration(){const st=document.getElementById('inputSuperficieTotale').value,sb=document.getElementById('inputSuperficieBureau').value,sta=document.getElementById('inputStatut').value;if(!st||parseFloat(st)<=0)return toast('Superficie totale requise','error');if(!sb||parseFloat(sb)<=0)return toast('Superficie bureau requise','error');if(parseFloat(sb)>parseFloat(st))return toast('Bureau ne peut pas être plus grand que le total','error');if(!sta)return toast('Sélectionnez votre statut','error');try{const r=await(await fetch(SCRIPT_URL,{method:'POST',body:JSON.stringify({action:'saveDeclaration',code:user.code,nom:user.nom,prenom:user.prenom,superficieTotale:st,superficieBureau:sb,statut:sta})})).json();if(r.success){toast('Déclaration enregistrée ✓');loadDeclarationSiege()}else toast(r.error||'Erreur','error')}catch(e){toast('Erreur','error')}}
+</script>
